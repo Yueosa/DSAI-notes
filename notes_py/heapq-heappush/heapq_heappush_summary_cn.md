@@ -21,16 +21,16 @@ def heappush(heap, item):
 `_siftdown` 方法的定义如下:
 ```python
 def _siftdown(heap, startpos, pos):
-    newitem = heap[pos]
+    newitem = heap[pos] # 保存待调整元素
     while pos > startpos:
-        parentpos = (pos - 1) >> 1
+        parentpos = (pos - 1) >> 1 # 计算父节点位置(等价于(pes - 1) // 2)
         parent = heap[parentpos]
-        if newitem < parent:
-            heap[pos] = parent
-            pos = parentpos
+        if newitem < parent: # 最小堆: 子节点 < 父节点时需要替换
+            heap[pos] = parent # 父节点下移
+            pos = parentpos # 向上检查
             continue
-        break
-    heap[pos] = newitem
+        break # 以满足堆属性时终止
+    heap[pos] = newitem # 最终定位新元素
 ```
 在 `_siftdown` 函数中:
 - 元素与其父元素的值进行比较。
