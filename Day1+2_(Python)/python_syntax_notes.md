@@ -84,11 +84,11 @@ while x < 5:
 
 创建、操作、删除：
 ```python
-fruits = ["🍎", "🍌", "🍓"]
-fruits.append("🍇")
-fruits.insert(1, "🍍")
-fruits.pop()
-fruits.pop(0)
+fruits = ["🍎", "🍌", "🍓"] # 定义列表
+fruits.append("🍇") # 朝列表最后加入
+fruits.insert(1, "🍍") # 朝指定位置插入(插入到索引1, 其他元素往后挪一位)
+fruits.pop() # 删除并返回最后一个值
+fruits.pop(0) # 删除并返回第一个值
 ```
 
 #### ✅ 列表推导式（新技能）
@@ -166,41 +166,5 @@ def get_pos_data() -> Tuple[List[int], List[int]]:
 | `del dict[key]` | 删除字典项 |
 | 列表推导式 | 精简写法创建新列表 |
 | `.items()` | 遍历字典键值对 |
-
----
-
-## 🛠 实战练习项目
-
-### 猜数字小游戏
-- 使用 `random.randint` 随机数
-- 自定义输入范围
-- 使用 `isdigit()` 判断合法输入
-- 使用 `while True` + `break` 实现持续猜测
-
-
-### 水果库存管理系统
-- 使用 `dict` 实现库存逻辑
-- 支持添加、修改、删除、查询功能
-- 模块化函数封装 + 菜单交互
-
-
-### 图书馆系统结构设计（思维构建）
-```python
-books = {
-    "算法导论": {"available": True},
-    "C语言": {"available": False}
-}
-```
-- 提出字典嵌套方案
-- 支持借书、还书、添加图书等操作
-- 预设未来持久化使用 JSON 存储
-
----
-
-## 🧭 下一阶段预告
-
-- 面向对象编程（OOP）：class/对象/方法/继承
-- 列表推导式进阶 + 函数式工具（lambda, map, filter）
-- 模块与项目结构组织
 
 ---
