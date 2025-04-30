@@ -61,3 +61,14 @@ if st.button("生成我的头衔！"):
 #### 可折叠区域`.expander()`
     让一些内容默认隐藏, 需要点击展开
     语法是 with streamlit.expander()
+
+---
+
+### 进阶 | 数据可视化
+| 图表类型 | 对应函数 | 适合什么用 |
+| - | - | - |
+| 折线图 | `.line_chart()` | 展示之间变化趋势, 如温度、价格等 |
+| 柱状图 | `.bar_chart()` | 分类比较, 如各班成绩、销售数量 |
+| 区域图 | `.area_chart()` | 堆叠变化, 如流量组成、比例变化 |
+| 自定义图 | `.pyplot()` `.altair_chart()` | 用 matplotlib、Altair 等画复杂图 |
+
