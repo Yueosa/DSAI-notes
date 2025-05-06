@@ -72,3 +72,15 @@ if st.button("生成我的头衔！"):
 | 区域图 | `.area_chart()` | 堆叠变化, 如流量组成、比例变化 |
 | 自定义图 | `.pyplot()` `.altair_chart()` | 用 matplotlib、Altair 等画复杂图 |
 
+    接受DataFrame、Series 或 二维 numpy 数组
+
+---
+
+### 进阶 | 文件上传 | 数据处理
+
+| 功能 | 方法 |
+| - | - |
+| 上传文件 | `.file_uploader()` |
+| 读取CSV、TXT | `pandas.read_csv()` `.read_table()` |
+| 显示表格 | `.dataframe()` `.table()` |
+| 预览数据形状/列名/缺失值 | `.shape` `.columns` `.isna().sum()` |
