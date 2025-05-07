@@ -15,3 +15,5 @@ with col2:
 with st.expander("📂 查看更多信息"):
     st.write("这里是一些额外的说明文字")
     st.code("print('Hello Streamlit')", language='python')
+
+"演示 分栏 和 可折叠区域"

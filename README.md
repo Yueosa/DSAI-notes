@@ -122,6 +122,14 @@
 
 ---
 
+### 📅 5 月 07 日（Day 15）
+
+- 完成Streamlit练习题
+- 学习了ngrok
+- 购买了个人域名
+
+---
+
 ## 📌 学习计划概览（长期）
 
 - Python + 数据处理（numpy / pandas / matplotlib）

@@ -17,3 +17,5 @@ st.write("这是模拟数据：", df)
 st.line_chart(df)
 st.bar_chart(df)
 st.area_chart(df)
+
+"演示 图表"

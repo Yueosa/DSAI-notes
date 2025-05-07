@@ -23,3 +23,5 @@ if st.button("生成我的头衔！"):
         st.success(f"{name}，你是一位「{tag}」！")
     else:
         st.warning("请先输入你的名字！")
+
+"演示 输入 和 按钮"

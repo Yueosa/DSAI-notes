@@ -31,3 +31,5 @@ if uploaded_file:
             st.warning("请至少选择一个列来进行绘图~")
     else:
         st.warning("⚠️ 没有数值列可用于绘图。")
+
+"演示 多列对比图表"
