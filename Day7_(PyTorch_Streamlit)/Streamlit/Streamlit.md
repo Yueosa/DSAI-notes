@@ -7,7 +7,8 @@
 
 | 类型 | 方法 | 说明 |
 | --- | --- | ---| 
-| 文本展示 | `.title()` `.write()` `.markdown()` | 显示标题, 内容, 富文本 |
+| 文本展示 | `.title()` `.write()` `.header()` `.subheader()` `.text()` `.markdown()` `.caption()` `.code()` `.latex()` | 显示标题, 内容, 富文本 |
+| 消息提示 | `.success()` `.warning()` `.error()` `.info()` | 用于打印消息 |
 | 输入框 | `.text_input()` `.text_area()` | 用户输入内容(文本) |
 | 按钮 | `.button()` | 用户点击触发事件 |
 | 单选, 多选 | `.radio()` `.checkbox()` `.selectbox()` | 做选项选择 |
@@ -61,7 +62,12 @@ if st.button("生成我的头衔！"):
 #### 可折叠区域`.expander()`
     让一些内容默认隐藏, 需要点击展开
     语法是 with streamlit.expander()
-
+#### 动态容器`.container()`
+    创建一块可以随时追加更新的页面块, 不刷新整个页面
+    语法是 st.container() 实例化, 之后直接用 container.write() 等方法追加内容
+#### 临时占位符`.empty()`
+    创建一块可以随时覆盖更新的页面块, 不刷新整个页面
+    语法是 st.empty() 实例化, 之后直接用 empty.write() 等方法覆盖更新
 ---
 
 ### 进阶 | 数据可视化
@@ -84,3 +90,66 @@ if st.button("生成我的头衔！"):
 | 读取CSV、TXT | `pandas.read_csv()` `.read_table()` |
 | 显示表格 | `.dataframe()` `.table()` |
 | 预览数据形状/列名/缺失值 | `.shape` `.columns` `.isna().sum()` |
+
+---
+
+### 进阶 | 状态管理 | 多页面
+
+#### 状态管理`.session_state`
+    是一个全局字典对象
+    用来保存跨页面和多次交互的状态
+
+#### 页面切换`.tabs()`
+    创建共存的多标签页面
+    多标签页面并行存在, 不会刷新页面
+
+---
+
+### 文件展示(图片/音频/视频)
+
+#### 图片展示`.image()`
+    接受参数 path(位置参数), caption, width等等
+    也可以上传展示:
+```python
+uploader_file = st.file_uploader("选择一张图片", type=["png", "jpg", "jpeg"])
+if uploader_file:
+    st.image(uploader_file, caption="上传的图片", width=300)
+else:
+    st.info("请上传正确格式的图片")
+```
+
+#### 音频展示`.audio()`
+```python
+audio_file = st.file_uploader("选择一个音频文件", type=["mp3", "wav", "ogg"])
+if audio_file:
+    st.audio(audio_file, format="audio/mp3")
+else:
+    st.info("请上传正确格式的音频")
+```
+
+#### 视频展示`.video()`
+```python
+video_file = st.file_uploader("选择一个视频文件", type=["mp4", "webm", "mov"])
+if video_file:
+    st.video(video_file)
+else:
+    st.info("请选择正确格式的视频")
+```
+
+---
+
+### 表单提交
+
+#### `.from()`
+    将多个输入控件组合在一起, 实现一次性提交
+```python
+with st.from("message_from"):
+    username = st.text_input("你的名字")
+    age = st.number_input("年龄", min_value=0, max_value=100)
+    bio = st.text_area("个人简介")
+
+    submitted = st.from_submit_button("提交")
+if submitted:
+    st.success(f"{usernmae}-{age}-{bio}")
+```
+

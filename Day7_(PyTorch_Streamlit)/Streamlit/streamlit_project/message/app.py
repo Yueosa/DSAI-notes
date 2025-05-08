@@ -4,13 +4,21 @@ from datetime import datetime
 import os
 import uuid
 
-DATA_PATH: str = "messages.json"
-ADMIN_PASSWORD = "123456"  # ⚠️ 修改为你的管理员密码
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+IMAGE_DIR = os.path.join(UPLOAD_DIR, "images")
+VIDEO_DIR = os.path.join(UPLOAD_DIR, "videos")
+AUDIO_DIR = os.path.join(UPLOAD_DIR, "audios")
+DATA_PATH = os.path.join(BASE_DIR, "messages.json")
+ADMIN_PASSWORD: any = "Yosa-0516"
 
 if not os.path.exists(DATA_PATH):
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump([], f)
 
+for dir in [IMAGE_DIR, VIDEO_DIR, AUDIO_DIR]:
+    os.makedirs(dir, exist_ok=True)
 
 def load_messages():
     with open(DATA_PATH, "r", encoding="utf-8") as f:
@@ -35,7 +43,6 @@ def name_list():
     name_list = load_messages()
     search_list = {msg["name"] for msg in name_list}
     return search_list
-
 
 st.set_page_config(page_title="留言板系统", layout="wide")
 st.title("📮 迷你留言板系统")
@@ -67,53 +74,122 @@ with st.sidebar:
 
 st.markdown("---")
 
-# ✅ 留言区
-with st.expander("编写留言"):
-    name = st.text_input("你的名字: ")
-    message = st.text_area("你想说的话:  ")
+tab1, tab2 = st.tabs(["留言", "更多"])
 
-    if st.button("📬 提交留言"):
-        if name.strip() and message.strip():
-            id = str(uuid.uuid4())
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            save_messages({"id": id, "name": name, "message": message, "timestamp": timestamp})
-            st.success("留言已提交, 刷新查看~")
-        else:
-            st.warning("请填写完整的内容再提交哦~")
+with tab1:
+    # ✅ 留言区
+    with st.expander("编写留言"):
+        # 文件上传控件 - 移出 form
+        st.subheader("文件上传")
+        image_file = st.file_uploader("上传图片", type=["png", "jpg", "jpeg"], key="image")
+        video_file = st.file_uploader("上传视频", type=["mp4", "webm"], key="video")
+        audio_file = st.file_uploader("上传音频", type=["mp3", "wav"], key="audio")
+        
+        # 即时预览
+        if image_file:
+            st.image(image_file, width=150, caption="图片预览")
+        if video_file:
+            st.video(video_file)
+        if audio_file:
+            st.audio(audio_file)
 
-st.markdown("---")
-st.subheader("📜 历史留言")
+        # 留言表单
+        with st.form("message_form"):
+            name = st.text_input("你的名字: ")
+            message = st.text_area("你想说的话:  ")
 
-# ✅ 显示删除成功信息
-if st.session_state["delete_msg"]:
-    st.success(st.session_state["delete_msg"])
-    st.session_state["delete_msg"] = None
+            # 提交按钮
+            submit = st.form_submit_button("📬 提交留言")
 
-# ✅ 展示历史留言
-for msg in reversed(load_messages()):
-    col_text, col_btn = st.columns([9, 1])
+            if submit:
+                if name.strip() and message.strip():
+                    message_id = str(uuid.uuid4())
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    files = {"image": None, "video": None, "audio": None}
 
-    with col_text:
-        st.markdown(
-            f"""
-            <div style='
-                background-color: #f0f2f6;
-                padding: 10px;
-                border-radius: 10px;
-                box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
-                margin-bottom: 10px;
-            '>
-            <strong>{msg['name']}</strong> 说：{msg['message']}<br>
-            <span style='font-size: 12px; color: gray;'>🕒 {msg['timestamp']}</span>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+                    # 文件保存
+                    if image_file:
+                        image_path = os.path.join(IMAGE_DIR, f"{message_id}_{image_file.name}")
+                        with open(image_path, "wb") as f:
+                            f.write(image_file.getbuffer())
+                        files["image"] = image_path
 
-    with col_btn:
-        if st.session_state["is_admin"]:
-            if st.button("🗑️", key=f"del_{msg['id']}"):
-                del_messages(msg['id'])
-                st.session_state["delete_msg"] = "留言已删除"
-                st.rerun()
-                
+                    if video_file:
+                        video_path = os.path.join(VIDEO_DIR, f"{message_id}_{video_file.name}")
+                        with open(video_path, "wb") as f:
+                            f.write(video_file.getbuffer())
+                        files["video"] = video_path
+
+                    if audio_file:
+                        audio_path = os.path.join(AUDIO_DIR, f"{message_id}_{audio_file.name}")
+                        with open(audio_path, "wb") as f:
+                            f.write(audio_file.getbuffer())
+                        files["audio"] = audio_path
+
+                    # 保存留言
+                    save_messages({
+                        "id": message_id,
+                        "name": name,
+                        "message": message,
+                        "timestamp": timestamp,
+                        "files": files
+                    })
+                    st.success("留言已提交~我喜欢你!")
+                else:
+                    st.warning("请填写完整的内容再提交哦~")
+
+
+    st.markdown("---")
+    st.subheader("📜 历史留言")
+
+    # ✅ 显示删除成功信息
+    if st.session_state["delete_msg"]:
+        st.success(st.session_state["delete_msg"])
+        st.session_state["delete_msg"] = None
+
+    # ✅ 展示历史留言
+    for msg in reversed(load_messages()):
+        col_text, col_btn = st.columns([9, 1])
+
+        with col_text:
+            st.markdown(
+                f"""
+                <div style='
+                    background-color: #f0f2f6;
+                    padding: 10px;
+                    border-radius: 10px;
+                    box-shadow: 1px 1px 3px rgba(0,0,0,0.05);
+                    margin-bottom: 10px;
+                '>
+                <strong>{msg['name']}</strong> 说：{msg['message']}<br>
+                <span style='font-size: 12px; color: gray;'>🕒 {msg['timestamp']}</span>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+
+            files = msg.get("files", {"image": None, "video": None, "audio": None})
+
+            # 图片展示
+            if msg["files"]["image"]:
+                st.image(msg["files"]["image"])
+
+            # 视频展示
+            if msg["files"]["video"]:
+                st.video(msg["files"]["video"])
+
+            # 音频展示
+            if msg["files"]["audio"]:
+                st.audio(msg["files"]["audio"])
+
+        with col_btn:
+            # 仅管理员可删除
+            if st.session_state["is_admin"]:
+                if st.button("🗑️", key=f"del_{msg['id']}"):
+                    del_messages(msg['id'])
+                    st.session_state["delete_msg"] = "留言已删除"
+                    st.rerun()
+
+
+with tab2:
+    st.header("暂时没有东西哦")
