@@ -79,13 +79,10 @@ tab1, tab2 = st.tabs(["留言", "更多"])
 with tab1:
     # ✅ 留言区
     with st.expander("编写留言"):
-        # 文件上传控件 - 移出 form
-        st.subheader("文件上传")
         image_file = st.file_uploader("上传图片", type=["png", "jpg", "jpeg"], key="image")
         video_file = st.file_uploader("上传视频", type=["mp4", "webm"], key="video")
         audio_file = st.file_uploader("上传音频", type=["mp3", "wav"], key="audio")
         
-        # 即时预览
         if image_file:
             st.image(image_file, width=150, caption="图片预览")
         if video_file:
