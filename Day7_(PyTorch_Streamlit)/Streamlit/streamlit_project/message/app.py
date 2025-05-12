@@ -4,14 +4,13 @@ from datetime import datetime
 import os
 import uuid
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 IMAGE_DIR = os.path.join(UPLOAD_DIR, "images")
 VIDEO_DIR = os.path.join(UPLOAD_DIR, "videos")
 AUDIO_DIR = os.path.join(UPLOAD_DIR, "audios")
 DATA_PATH = os.path.join(BASE_DIR, "messages.json")
-ADMIN_PASSWORD: any = "Yosa-0516"
+ADMIN_PASSWORD = "Yosa-0516"
 
 if not os.path.exists(DATA_PATH):
     with open(DATA_PATH, "w", encoding="utf-8") as f:
@@ -22,22 +21,36 @@ for dir in [IMAGE_DIR, VIDEO_DIR, AUDIO_DIR]:
 
 def load_messages():
     with open(DATA_PATH, "r", encoding="utf-8") as f:
-        return json.load(f)
-
+        messages = json.load(f)
+    
+    for msg in messages:
+        files = msg.get("files", {})
+        for file_type in files:
+            if files[file_type]:
+                # 确保使用正确的子文件夹
+                subdir = f"{file_type}s"  # images, videos, audios
+                files[file_type] = os.path.join(UPLOAD_DIR, subdir, os.path.basename(files[file_type]))
+    return messages
 
 def save_messages(new_msg):
     messages = load_messages()
     messages.append(new_msg)
+    
+    for msg in messages:
+        files = msg.get("files", {})
+        for file_type in files:
+            if files[file_type]:
+                # 只保存文件名
+                files[file_type] = os.path.basename(files[file_type])
+                
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(messages, f, ensure_ascii=False, indent=4)
-
 
 def del_messages(id):
     message_list = load_messages()
     message_list = [msg for msg in message_list if msg["id"] != id]
     with open(DATA_PATH, "w", encoding="utf-8") as f:
         json.dump(message_list, f, ensure_ascii=False, indent=4)
-
 
 def name_list():
     name_list = load_messages()
@@ -109,19 +122,19 @@ with tab1:
                         image_path = os.path.join(IMAGE_DIR, f"{message_id}_{image_file.name}")
                         with open(image_path, "wb") as f:
                             f.write(image_file.getbuffer())
-                        files["image"] = image_path
+                        files["image"] = os.path.relpath(image_path, UPLOAD_DIR)
 
                     if video_file:
                         video_path = os.path.join(VIDEO_DIR, f"{message_id}_{video_file.name}")
                         with open(video_path, "wb") as f:
                             f.write(video_file.getbuffer())
-                        files["video"] = video_path
+                        files["video"] = os.path.relpath(video_path, UPLOAD_DIR)
 
                     if audio_file:
                         audio_path = os.path.join(AUDIO_DIR, f"{message_id}_{audio_file.name}")
                         with open(audio_path, "wb") as f:
                             f.write(audio_file.getbuffer())
-                        files["audio"] = audio_path
+                        files["audio"] = os.path.relpath(audio_path, UPLOAD_DIR)
 
                     # 保存留言
                     save_messages({
@@ -169,15 +182,18 @@ with tab1:
 
             # 图片展示
             if msg["files"]["image"]:
-                st.image(msg["files"]["image"])
+                image_path = os.path.join(UPLOAD_DIR, "images", os.path.basename(msg["files"]["image"]))
+                st.image(image_path)
 
             # 视频展示
             if msg["files"]["video"]:
-                st.video(msg["files"]["video"])
+                video_path = os.path.join(UPLOAD_DIR, "videos", os.path.basename(msg["files"]["video"]))
+                st.video(video_path)
 
             # 音频展示
             if msg["files"]["audio"]:
-                st.audio(msg["files"]["audio"])
+                audio_path = os.path.join(UPLOAD_DIR, "audios", os.path.basename(msg["files"]["audio"]))
+                st.audio(audio_path)
 
         with col_btn:
             # 仅管理员可删除

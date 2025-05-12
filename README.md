@@ -132,29 +132,37 @@
 
 ### 📅 5 月 08 日（Day 17）
 
-- 安装学习ArchLinux的第一天
+- 安装学习Arch Linux的第一天
   - 好复杂的安装系统
 
 ---
 
 ### 📅 5 月 09 日（Day 18）
 
-- 安装学习ArchLinux的第二天
+- 安装学习Arch Linux的第二天
   - 重新安装， 终于可以进桌面了喵
 
 ---
 
 ### 📅 5 月 10 日（Day 19）
 
-- 安装学习ArchLinux的第三天
+- 安装学习Arch Linux的第三天
   - 被音频问题搞破防了喵
 
 ---
 
 ### 📅 5 月 11 日（Day 20）
 
-- 安装学习ArchLinux的第四天
+- 安装学习Arch Linux的第四天
   - 解决了Pipewire音频问题
+
+---
+
+### 📅 5 月 12 日（Day 21）
+
+- 学习Arch Linux的第五天
+  - 安装 fcitx5-rime，zsh，lsd，bat，lolcat
+  - 配置 rime-wanxiang，.zshrc
 
 ## 📌 学习计划概览（长期）
 
