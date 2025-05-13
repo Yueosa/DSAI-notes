@@ -164,6 +164,14 @@
   - 安装 fcitx5-rime，zsh，lsd，bat，lolcat
   - 配置 rime-wanxiang，.zshrc
 
+---
+
+### 📅 5 月 13 日（Day 22）
+
+- 花时间研究 GitHub 的 README.md
+
+---
+
 ## 📌 学习计划概览（长期）
 
 - Python + 数据处理（numpy / pandas / matplotlib）
