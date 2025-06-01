@@ -1,17 +1,19 @@
-def add_fruit(stock: dict):
+"练习: 水果库存系统"
+def add_fruit(stock: dict[str, int]) -> None:
     name = input("请输入水果名称：").strip()
     if name in stock:
         print("该水果已存在，当前库存为", stock[name])
         return
     try:
-        count = int(input("请输入库存数量："))
+        count: int = int(input("请输入库存数量："))
         stock[name] = count
         print("✅ 添加成功！")
     except ValueError:
         print("❗ 数量必须是整数")
 
-def update_fruit(stock: dict):
-    name = input("请输入要修改的水果：").strip()
+
+def update_fruit(stock: dict[str, int]) -> None:
+    name: str = input("请输入要修改的水果：").strip()
     if name not in stock:
         print("❌ 没有这个水果")
         return
@@ -22,20 +24,20 @@ def update_fruit(stock: dict):
     except ValueError:
         print("❗ 数量必须是整数")
 
-def delete_fruit(stock: dict):
-    name = input("请输入要删除的水果：").strip()
+def delete_fruit(stock: dict[str, int]) -> None:
+    name: str = input("请输入要删除的水果：").strip()
     if name in stock:
         del stock[name]
         print("✅ 删除成功")
     else:
         print("❌ 没有这个水果")
 
-def query_fruit(stock: dict):
+def query_fruit(stock: dict[str, int]) -> None:
     for k, v in stock.items():
-        print(f"{k}：{v}个")
+        print(f"{k}: {v}个")
 
-def main():
-    stock = {}
+def main() -> None:
+    stock: dict[str, int] = {}
     while True:
         print("""
 ====== 水果库存系统 ======
@@ -45,7 +47,7 @@ def main():
 4. 查看所有
 0. 退出
 """)
-        choice = input("请选择操作：").strip()
+        choice: str = input("请选择操作：").strip()
         if choice == "1":
             add_fruit(stock)
         elif choice == "2":
@@ -60,4 +62,5 @@ def main():
         else:
             print("⚠️ 输入无效，请重新选择")
 
-main()
+if __name__ == '__main__':
+    main()
