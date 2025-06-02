@@ -1,28 +1,27 @@
-
-# Python OOP 进阶学习笔记（详细完整版）
-
----
-
-## ✅ 一、编程核心术语理解表
-
-| 名词 | 含义 | 示例 / 解读 |
-|------|------|--------------|
-| 类（Class） | 模板，用于创建对象 | `class AI:` |
-| 对象 / 实例（Object / Instance） | 类的产物 | `bot = AI()` |
-| self | 当前对象 | `self.name = name` |
-| cls | 当前类本体 | `@classmethod def create(cls):` |
-| 类变量 | 所有实例共享 | `AI.total_created` |
-| 实例变量 | 每个对象独有 | `self.name` |
-| 实例方法 | 操作实例的方法 | `def say(self):` |
-| 类方法 | 操作类的方法 | `@classmethod def info(cls):` |
-| 静态方法 | 工具函数型方法 | `@staticmethod def tool():` |
-| 装饰器 | 包裹函数的语法糖 | `@timer`, `@classmethod` |
-| 组合 has-a | 一个类包含另一个类的对象 | `self.logger = Logger()` |
-| 继承 is-a | 子类是父类的一种扩展 | `class PetAI(AI):` |
+# Python OOP
 
 ---
 
-## ✅ 二、类变量 & 实例变量（深入理解）
+## ✅ 术语表
+
+| 名词                             | 含义                     | 示例 / 解读                     |
+| -------------------------------- | ------------------------ | ------------------------------- |
+| 类（Class）                      | 模板，用于创建对象       | `class AI:`                     |
+| 对象 / 实例（Object / Instance） | 类的产物                 | `bot = AI()`                    |
+| self                             | 当前对象                 | `self.name = name`              |
+| cls                              | 当前类本体               | `@classmethod def create(cls):` |
+| 类变量                           | 所有实例共享             | `AI.total_created`              |
+| 实例变量                         | 每个对象独有             | `self.name`                     |
+| 实例方法                         | 操作实例的方法           | `def say(self):`                |
+| 类方法                           | 操作类的方法             | `@classmethod def info(cls):`   |
+| 静态方法                         | 工具函数型方法           | `@staticmethod def tool():`     |
+| 装饰器                           | 包裹函数的语法糖         | `@timer`, `@classmethod`        |
+| 组合 has-a                       | 一个类包含另一个类的对象 | `self.logger = Logger()`        |
+| 继承 is-a                        | 子类是父类的一种扩展     | `class PetAI(AI):`              |
+
+---
+
+## ✅ 二、类变量 & 实例变量
 
 ```python
 class Robot:
@@ -33,8 +32,39 @@ class Robot:
         Robot.counter += 1
 ```
 
-- 类变量：`Robot.counter` 所有实例共享
-- 实例变量：`self.name` 每个实例独有
+-   类变量：`Robot.counter` 所有实例共享
+    -   是一个动态引用，所有实例访问类变量时，本质上是到类里查找
+-   实例变量：`self.name` 每个实例独有
+    -   实例赋值变量与类变量同名时会屏蔽类变量
+
+#### 访问类变量
+
+```python
+class Foo:
+    x = 1
+
+a = Foo()
+a.x = 2
+
+"直接访问"
+print(Foo.x) # 1
+
+"获取类"
+print(type(a).x) # type(a) = <class '__main__.Foo'>
+
+"用class属性"
+print(a.__class__.x) # a.__class__ = <class '__main__.Foo'>
+
+"在实例内部访问"
+print(self.__class__.x)
+print(type(self).x)
+
+"遍历MRO链-应对多重继承"
+for cls in a.__class__.__mro__:
+    if 'x' in cls.__dict__:
+        print(cls.__dict__['x'])
+        break
+```
 
 ---
 
@@ -42,22 +72,27 @@ class Robot:
 
 ```python
 class Tool:
+    "实例方法"
     def normal(self): pass
+
+    "类方法"
     @classmethod
     def class_method(cls): pass
+
+    "静态方法"
     @staticmethod
     def static_method(): pass
 ```
 
-| 类型 | 第一个参数 | 作用对象 | 用途 |
-|------|-------------|-----------|------|
-| 实例方法 | self | 实例本身 | 操作对象 |
-| 类方法 | cls | 类本体 | 操作类变量，注册信息 |
-| 静态方法 | 无 | 无 | 工具函数风格 |
+| 类型     | 第一个参数 | 作用对象 | 用途                 |
+| -------- | ---------- | -------- | -------------------- |
+| 实例方法 | `self`     | 实例本身 | 操作对象             |
+| 类方法   | `cls`      | 类本体   | 操作类变量，注册信息 |
+| 静态方法 | 无         | 无       | 工具函数风格         |
 
 ---
 
-## ✅ 四、装饰器结构与执行顺序（重点）
+## ✅ 四、装饰器结构
 
 ```python
 def timer(func):
@@ -70,13 +105,13 @@ def timer(func):
     return wrapper
 ```
 
-- `@timer` 是函数定义时就会执行
-- `wrapper` 是新函数，代替原函数执行
-- `*args, **kwargs` 确保参数通用性
+-   `@timer` 是函数定义时就会执行
+-   `wrapper` 是新函数，代替原函数执行
+-   `*args, **kwargs` 确保参数通用性
 
 ---
 
-## ✅ 五、*args 和 **kwargs（深入）
+## ✅ 五、\*args 和 \*\*kwargs
 
 ```python
 def demo(*args, **kwargs):
@@ -84,54 +119,111 @@ def demo(*args, **kwargs):
     print(kwargs)   # 字典：关键字参数
 ```
 
-- `*args` 适合传入不定数量的普通参数
-- `**kwargs` 适合传入不定数量的键值参数
+-   `*args` 适合传入不定数量的普通参数
+-   `**kwargs` 适合传入不定数量的键值参数
 
 ---
 
-## ✅ 六、类元信息提取（你特别钻研）
+## ✅ 六、类元信息提取
 
 ```python
-class PetAI(AI): pass
-```
+class Animal:
+    type = "动物"
 
-| 表达式 | 结果 |
-|--------|------|
-| `obj.__class__` | 获取对象所属类 |
-| `cls.__name__` | 获取类名字符串 |
-| `cls.__bases__` | 获取直接父类元组 |
-| `obj.__dict__` | 获取对象当前属性字典 |
+    def __init__(self):
+        self.age = 0
 
-你特别关注 `__bases__` 是为了理解类继承结构，用于构建注册表结构：
+class PetAI(Animal):
+    def __init__(self, name):
+        super().__init__()
+        self.name = name
 
-```python
-if cls.__name__ not in AIManager.registered_classes:
-    AIManager.registered_classes[cls.__name__] = cls.__bases__[0].__name__
+# 创建实例
+pet = PetAI("小白")
+
+# 类元信息获取示例
+print(pet.__class__)        # <class '__main__.PetAI'>
+print(PetAI.__name__)       # 'PetAI'
+print(PetAI.__bases__)      # (<class '__main__.Animal'>,)
+print(pet.__dict__)         # {'name': '小白', 'age': 0}
+print(PetAI.__mro__)        # (<class '__main__.PetAI'>, <class '__main__.Animal'>, <class 'object'>)
 ```
 
 ---
 
-## ✅ 七、组合结构 has-a（你苦思良久）
+## ✅ 七、组合结构 has-a
 
 ```python
 class Logger:
     def log(self, msg):
         print(f"[LOG] {msg}")
 
+class Storage:
+    def save(self, data):
+        print(f"[SAVE] {data}")
+
 class AI:
     def __init__(self, name):
         self.name = name
-        self.logger = Logger()  # 组合：AI 拥有 Logger
+        self.logger = Logger()     # 组合：记录日志功能
+        self.storage = Storage()   # 组合：数据存储功能
+
+    def process(self, data):
+        self.logger.log(f"处理数据: {data}")
+        result = f"AI {self.name} 处理了 {data}"
+        self.storage.save(result)
+        return result
+
+# 使用示例
+bot = AI("小智")
+bot.process("用户输入")
 ```
 
-- **不是继承关系**，而是“对象包含对象”
-- 更灵活、可重用、可拆卸
+-   **不是继承关系**，而是"对象包含对象"
+-   更灵活、可重用、可拆卸
+-   每个组件都专注于自己的功能
 
----
+## ✅ 八、继承结构 is-a
 
-## ✅ 八、总结：类的多重角色（你独立总结的亮点）
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
 
-> 类不仅是创建对象的模板，也可以是工具函数的容器、模块注册中心、组合式行为载体。
+    def speak(self):
+        pass
 
----
+class Dog(Animal):
+    def speak(self):
+        return f"{self.name}：汪汪！"
 
+class Cat(Animal):
+    def speak(self):
+        return f"{self.name}：喵～"
+
+class Robot:
+    def charge(self):
+        print("充电中...")
+
+class RobotDog(Dog, Robot):  # 多重继承
+    def speak(self):
+        return f"机器狗{self.name}：汪汪！beep!"
+
+# 使用示例
+animals = [
+    Dog("小黑"),
+    Cat("咪咪"),
+    RobotDog("铁头")
+]
+
+for animal in animals:
+    print(animal.speak())
+
+# 多重继承特性
+robo_dog = RobotDog("铁头")
+robo_dog.charge()  # 来自Robot类
+```
+
+-   继承表示"是一种"关系：狗是动物的一种
+-   支持方法重写：每种动物都有自己的叫声
+-   支持多重继承：机器狗既是狗也是机器
