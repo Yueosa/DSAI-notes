@@ -1,5 +1,7 @@
 # Python OOP
 
+> 关于 **类(class)** 的本质研究请见 `../notes/Python_Class`
+
 ---
 
 ## ✅ 术语表
