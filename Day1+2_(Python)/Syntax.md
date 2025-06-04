@@ -220,7 +220,7 @@ for k, v in student.items():
 
 **集合** 是无序且不重复的元素集，适合去重、集合运算
 
-> 关于集合的机制研究，见../notes/Python_Set
+> 关于 **集合** 的机制研究，见 `../notes/Python_Set`
 
 ```python
 fruits = {"🍎", "🍌", "🍓"} # 创建集合
