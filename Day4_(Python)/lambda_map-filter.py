@@ -14,13 +14,26 @@
 '''
 
 def data_cleaning(nums: list) -> dict:
-    # 1. 清理负数并去重
+    """
+    作用: 通過三步處理, 返回期望字典
+
+    參數:
+        nums: 需要去重的列表
+    
+    處理:
+        (1) 使用 集合推導式, 篩選出所有 不爲複的值
+        (2) 使用 lambda 對所有數進行 平方 操作, 使用 list() 將 map() 實現並消耗
+        (3) 使用 字典推導式 返回數字和位數的 鍵值對
+    """
     cleaned = {x for x in nums if x >= 0}
     
-    # 2. 平方处理
     squared = list(map(lambda x: x ** 2, cleaned))
     
-    # 3. 转为 字典：数值 → 位数
     result = {num: len(str(num)) for num in squared}
     
     return result
+
+if __name__ == '__main__':
+    nums: list = [1, -23, 91, 226, -706, 847]
+    result: dict = data_cleaning(nums)
+    print(result)
