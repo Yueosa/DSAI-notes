@@ -1,4 +1,4 @@
-# 🧠 Python 学习笔记 · Day 4 · 2025 年 4 月 25 日
+# 🧠 推导式、高阶函数、数据结构初步
 
 ---
 
@@ -96,6 +96,8 @@ print(unique_evens)  # {2, 4}
 
 ## ✅ 五、lambda 表达式与高阶函数
 
+> 实例代码见 `./lambda_map-filter.py`
+
 ### 📌 lambda 基础语法：
 
 ```python
@@ -177,34 +179,13 @@ print(evens)  # [2, 4]
 | `peek()`     | 查看栈顶元素（不移除） |
 | `is_empty()` | 判断是否为空           |
 
-### ✅ 示例结构（使用 list 模拟）：
-
-```python
-stack = []
-stack.append("A")
-stack.append("B")
-print(stack.pop())  # B
-```
-
-### 💡 我的理解：
-
--   栈适合用于“撤销”、“回退”类型的场景。
--   练习中，我用它来保存任务历史记录，实现了任务完成轨迹。
+> 具体实例见 `./Stack_Queue.py`
 
 ---
 
 ## ✅ 七、队列（Queue）结构
 
 ### 📌 定义：先进先出（FIFO）
-
-使用 `collections.deque` 结构实现更高效：
-
-```python
-from collections import deque
-q = deque()
-q.append("任务1")
-print(q.popleft())  # "任务1"
-```
 
 ### ✅ 基本方法：
 
@@ -214,14 +195,13 @@ print(q.popleft())  # "任务1"
 | `popleft()` | 出队（开头） |
 | `peek()`    | 查看队首     |
 
-### 💡 我的理解：
-
--   `deque` 是双端队列，底层结构不是 list，而是类似双向链表。
--   它避免了 `.pop(0)` 带来的 O(n) 性能损耗，非常适合做消息队列。
+> 具体实例见 `./Stack_Queue.py`
 
 ---
 
 ## ✅ 八、生成器（Generator）与迭代器（Iterator）
+
+> 迭代器的实例代码见 `./Tierator_Generator.py`
 
 ### 📌 概念区分：
 
@@ -232,7 +212,7 @@ print(q.popleft())  # "任务1"
 
 ---
 
-### ✅ 示例：生成器表达式
+### 示例：生成器表达式
 
 ```python
 gen = (x * 2 for x in range(3))
@@ -240,9 +220,11 @@ print(next(gen))  # 0
 print(next(gen))  # 2
 ```
 
+> 关于 `range` 方法的研究见 `../notes/Python_range/range.md`
+
 ---
 
-### ✅ 示例：生成器函数
+### 示例：生成器函数
 
 ```python
 def gen_nums():
@@ -252,13 +234,3 @@ def gen_nums():
 g = gen_nums()
 print(next(g))  # 0
 ```
-
----
-
-### 💡 我的理解：
-
--   迭代器就是一个“单向只读流”，取过就没了，节省内存。
--   生成器是快速定义这类流的工具。
--   它们常用于数据流处理、大规模文件读取、网络数据处理等场景。
-
----
