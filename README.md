@@ -510,9 +510,29 @@
 
 ### - > 📅 6 月 08 日（Day 49）
 
--    折騰 `openstack` 的部署
+-    折騰 `openstack` 的項目一部署
 -    打完 `神様ちゅ～ず！` 了, 很喜歡, 完全沒有社區說的那麼獵奇
     - 劇情裡有一句 **"天活塑造了她的生活"** 瞬間把我抓住了
     - 不能接受的點還是關於天活() 因為我討厭油膩膩的老大叔...
 
 > 早知道不折騰 `openstack` 了, 真麻煩
+
+---
+
+### - > 📅 6 月 09 日（Day 50）
+
+-    `openstack` 的項目二部署也熟悉了
+-    研究開源桌寵 `mate-engine`
+-    等 **賽法利婭** up池子
+
+> 學長提到了 `dataease` 和 `ZcChat`, 看了看也是很不錯的項目
+
+---
+
+### - > 📅 6 月 10 日（Day 51）
+
+-   `mate-engine` 部署好了, **LLM** 使用了 **[Tifa-DeepsexV2-7b-NoCot-0325-Q4_KM](https://huggingface.co/ValueFX9507/Tifa-DeepsexV2-7b-MGRPO-GGUF-Q4)**
+    -   使用 **[deepwiki](https://github.com/AsyncFuncAI/deepwiki-open)** 閱讀源代碼, 發現好像支持 **api**, 大模型也可以使用 **unity編輯器** 微調
+    -   想用 `Q8`以上的模型, 因為 `Q4` 的損失太嚴重了, 但是好像要 **24G** 顯存, 我的電腦根本帶不動
+    -    不支持 `Linux`, 而且作者說以後也不會做的~主要還是開發難度太大了
+-    
